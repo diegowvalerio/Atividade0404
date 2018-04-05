@@ -1,5 +1,7 @@
 package com.example.aluno.atividade04_04;
 
+import java.util.Random;
+
 /**
  * Created by aluno on 28/03/18.
  */
@@ -10,20 +12,18 @@ public class Contato {
     private String telefone;
     private int imagem;
 
-    public Contato(long id, String nome, String telefone,
+    public Contato(String nome, String telefone,
                    int imagem) {
-        this.id = id;
         this.nome = nome;
         this.telefone = telefone;
         this.imagem = imagem;
+        this.id = newId();
     }
 
-    public long getId() {
-        return id;
-    }
+    private long newId(){
+        Random result = new Random();
 
-    public void setId(long id) {
-        this.id = id;
+        return result.nextLong();
     }
 
     public String getNome() {
@@ -48,5 +48,13 @@ public class Contato {
 
     public void setImagem(int imagem) {
         this.imagem = imagem;
+    }
+
+    public void setId(long id){
+        this.id = id;
+    }
+
+    public long getId(){
+        return id;
     }
 }

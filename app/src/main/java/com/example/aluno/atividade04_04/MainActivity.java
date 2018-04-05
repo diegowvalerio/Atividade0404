@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -19,20 +20,23 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity  implements AdapterView.OnItemClickListener{
 
     private ListView listViewContatos;
+    private AdapterContato adapter;
+    private String chave = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        listViewContatos  = (ListView) findViewById(R.id.listContatos);
+
         if (popularLista() != null){
-            AdapterContato adapter = new AdapterContato(this,popularLista());
+            adapter = new AdapterContato(this,popularLista());
 
             listViewContatos.setAdapter(adapter);
         }
-
-
-
     }
+
 
     private List<Contato> popularLista(){
 
@@ -43,13 +47,14 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
 
         //gson
         String contatoJson = lt.getString("contatos","nenhum");
+
         List<Contato> listacontatos = new ArrayList<>();
+
         if(!contatoJson.equals("nenhum")) {
             Gson gson = new Gson();
             listacontatos = gson.fromJson(contatoJson, new TypeToken<List<Contato>>() {
             }.getType());
         }
-
 
         return listacontatos;
     }
@@ -63,5 +68,23 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+    }
+
+    @Override
+    protected void onRestart() {
+       super.onRestart();
+
+        SharedPreferences shared = this.getPreferences(Context.MODE_PRIVATE);
+
+        String jsonContato = shared.getString("contatos", "sem contato");
+
+        Gson gson = new Gson();
+
+        List<Contato> listaContatos = gson.fromJson(jsonContato,
+                new TypeToken<List<Contato>>(){}.getType());
+
+        adapter = new AdapterContato(this, listaContatos);
+
+        listViewContatos.setAdapter(adapter);
     }
 }
