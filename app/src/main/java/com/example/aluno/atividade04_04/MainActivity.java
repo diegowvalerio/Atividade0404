@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
     private ListView listViewContatos;
     private AdapterContato adapter;
     private String chave = "MainActivity";
+    private boolean telaSobre;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +61,8 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
     }
 
     public  void novoContato(View view){
+        telaSobre = false;
+
         Intent intent = new
                 Intent(this, NovoContato.class);
         startActivity(intent);
@@ -74,6 +77,9 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
     protected void onRestart() {
        super.onRestart();
 
+       if (telaSobre)
+           return;
+
         SharedPreferences shared = this.getPreferences(Context.MODE_PRIVATE);
 
         String jsonContato = shared.getString("contatos", "sem contato");
@@ -87,4 +93,13 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
 
         listViewContatos.setAdapter(adapter);
     }
+
+    public  void chamarTelaSobre(View view){
+        telaSobre = true;
+
+        Intent intent = new
+                Intent(this, Sobre.class);
+        startActivity(intent);
+    }
+
 }
