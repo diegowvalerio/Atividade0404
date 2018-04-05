@@ -43,5 +43,6 @@ public class NovoContato extends AppCompatActivity {
         String jsonContatos = gson.toJson(listaContatos);
         editor.putString("contatos", jsonContatos);
         editor.commit();
+        finish();
     }
 }
